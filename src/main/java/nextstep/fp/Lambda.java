@@ -26,19 +26,11 @@ public class Lambda {
         }).start();
     }
 
-    public static int sumAll(List<Integer> numbers) {
-        return numbers.stream().reduce(new Lambda()::sum).get();
-    }
-
-    private Integer sum(Integer a, Integer b) {
-        return a+b;
-    }
-
-    public static int sumAllEven(List<Integer> numbers) {
-        return numbers.stream().filter(number -> number % 2 == 0).reduce(new Lambda()::sum).get();
-    }
-
-    public static int sumAllOverThree(List<Integer> numbers) {
-        return numbers.stream().filter(number -> number > 3).reduce(new Lambda()::sum).get();
+    public static int sumAll(List<Integer> numbers, SumStrategy ss) {
+        int total = 0;
+        for (int number : numbers) {
+            if (ss.test(number)) total += number;
+        }
+        return total;
     }
 }
