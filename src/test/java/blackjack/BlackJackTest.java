@@ -4,11 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-import static blackjack.BlackJackTest.CardType.HEART;
-import static blackjack.BlackJackTest.CardType.SPADE;
+import static blackjack.BlackJackTest.CardType.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class BlackJackTest {
     @Test
@@ -20,11 +21,17 @@ public class BlackJackTest {
         assertThat(cards.sumAll()).isEqualTo(15);
     }
 
-/*    @Test
+    @Test
     @DisplayName("두 장의 카드가 주어졌을 때, 21이 넘으면 예외를 발생시킨다.")
     void GivenTwoCards_WhenOverBlackJack_SumALl() {
-        Card card1 = new Card(10, )
-    }*/
+        Card card1 = new Card(10, CLOVER);
+        Card card2 = new Card(9, SPADE);
+        Card card3 = new Card(6, DIAMOND);
+
+        Cards cards = Cards.of(card1, card2);
+        cards.add(card3);
+        assertThatThrownBy(cards::sumAll).isInstanceOf(IllegalStateException.class).hasMessageContaining("블랙잭을 넘었습니다.");
+    }
 
     private class Card {
 
@@ -61,7 +68,8 @@ public class BlackJackTest {
         }
 
         public int sumAll() {
-            return cardSet.stream().mapToInt(Card::getNumber).sum();
+            Optional<Integer> optionalInt = Optional.of(cardSet.stream().mapToInt(Card::getNumber).sum());
+            return optionalInt.filter(x -> x <= 21).orElseThrow(() -> new IllegalStateException("블랙잭을 넘었습니다."));
         }
     }
 }
