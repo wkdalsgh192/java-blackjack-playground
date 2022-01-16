@@ -3,10 +3,10 @@ package blackjack;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static blackjack.BlackJackTest.CardNumber.ACE;
 import static blackjack.BlackJackTest.CardType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -15,8 +15,8 @@ public class BlackJackTest {
     @Test
     @DisplayName("두 장의 카드가 주어졌을 때, 합을 계산한다.")
     void GivenTwoCards_WhenTheyAreNotOverBlackJack_SumAll() {
-        Card card1 = new Card(5, HEART);
-        Card card2 = new Card(10, SPADE);
+        Card card1 = new Card(CardNumber.FIVE, HEART);
+        Card card2 = new Card(CardNumber.TEN, SPADE);
         Cards cards = Cards.of(card1, card2);
         assertThat(cards.sumAll()).isEqualTo(15);
     }
@@ -24,26 +24,37 @@ public class BlackJackTest {
     @Test
     @DisplayName("두 장의 카드가 주어졌을 때, 21이 넘으면 예외를 발생시킨다.")
     void GivenTwoCards_WhenOverBlackJack_SumALl() {
-        Card card1 = new Card(10, CLOVER);
-        Card card2 = new Card(9, SPADE);
-        Card card3 = new Card(6, DIAMOND);
+        Card card1 = new Card(CardNumber.TEN, CLOVER);
+        Card card2 = new Card(CardNumber.NINE, SPADE);
+        Card card3 = new Card(CardNumber.SIX, DIAMOND);
 
         Cards cards = Cards.of(card1, card2);
         cards.add(card3);
         assertThatThrownBy(cards::sumAll).isInstanceOf(IllegalStateException.class).hasMessageContaining("블랙잭을 넘었습니다.");
     }
 
+    @Test
+    @DisplayName("두 장의 카드 중 1장이 ACE일 때, 21이 넘지 않는 최대값을 계산한다.")
+    void GivenAceCard_WhenNotOverBlackJack_SumAll() {
+        Card card1 = new Card(ACE, CLOVER);
+        Card card2 = new Card(CardNumber.KING, HEART);
+        Cards cards = Cards.of(card1, card2);
+        assertThat(cards.sumAll(c -> c.getCardNumber() == ACE)).isEqualTo(20);
+    }
+
     private class Card {
 
-        private int number;
+        private CardNumber number;
         private CardType type;
 
-        public Card(int number, CardType type) {
+        public Card(CardNumber number, CardType type) {
             this.number = number;
             this.type = type;
         }
 
-        public int getNumber() { return number; }
+        public int getNumericValue() { return number.getNumericValue(); }
+
+        public CardNumber getCardNumber() { return number; }
     }
 
     enum CardType {
@@ -68,8 +79,49 @@ public class BlackJackTest {
         }
 
         public int sumAll() {
-            Optional<Integer> optionalInt = Optional.of(cardSet.stream().mapToInt(Card::getNumber).sum());
+            Optional<Integer> optionalInt = Optional.of(cardSet.stream().mapToInt(Card::getNumericValue).sum());
             return optionalInt.filter(x -> x <= 21).orElseThrow(() -> new IllegalStateException("블랙잭을 넘었습니다."));
         }
+
+        public int sumAll(CardStrategy cs) {
+            List<Card> list = cardSet.stream().sorted(Comparator.comparing(Card::getNumericValue, Comparator.reverseOrder())).collect(Collectors.toList());
+            int total = 0;
+            for (Card card : list) {
+                if (cs.containsCardNumber(card)) {
+                    if (total + 10 <= 21) total += 10;
+                    else total += ACE.getNumericValue();
+                }
+                else total += card.getNumericValue();
+            }
+            return total;
+        }
+    }
+
+    private interface CardStrategy {
+        boolean containsCardNumber(Card card);
+    }
+
+    enum CardNumber {
+        ACE(1),
+        TWO(2),
+        THREE(3),
+        FOUR(4),
+        FIVE(5),
+        SIX(6),
+        SEVEN(7),
+        EIGHT(8),
+        NINE(9),
+        TEN(10),
+        JACK(10),
+        QUEEN(10),
+        KING(10);
+
+        private int value;
+
+        CardNumber(int value) {
+            this.value = value;
+        }
+
+        public int getNumericValue() { return value; }
     }
 }
