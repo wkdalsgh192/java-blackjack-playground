@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static blackjack.BlackJackTest.CardNumber.ACE;
@@ -39,7 +40,9 @@ public class BlackJackTest {
         Card card1 = new Card(ACE, CLOVER);
         Card card2 = new Card(CardNumber.KING, HEART);
         Cards cards = Cards.of(card1, card2);
-        assertThat(cards.sumAll(c -> c.getCardNumber() == ACE)).isEqualTo(20);
+        assertThat(cards.sumAll()).isEqualTo(20);
+        cards.add(new Card(ACE, HEART));
+        assertThat(cards.sumAll()).isEqualTo(21);
     }
 
     private class Card {
@@ -65,7 +68,9 @@ public class BlackJackTest {
     }
 
     private static class Cards {
-        Set<Card> cardSet = new HashSet<>();
+
+        private final int BLACKJACK_NUMBER = 21;
+        private final Set<Card> cardSet = new HashSet<>();
 
         public static Cards of(Card c1, Card c2) {
             Cards cards = new Cards();
@@ -78,49 +83,46 @@ public class BlackJackTest {
             this.cardSet.add(card);
         }
 
-        public int sumAll() {
+/*        public int sumAll() {
             Optional<Integer> optionalInt = Optional.of(cardSet.stream().mapToInt(Card::getNumericValue).sum());
-            return optionalInt.filter(x -> x <= 21).orElseThrow(() -> new IllegalStateException("블랙잭을 넘었습니다."));
-        }
+            return optionalInt.filter(x -> x <= BLACKJACK_NUMBER).orElseThrow(() -> new IllegalStateException("블랙잭을 넘었습니다."));
+        }*/
 
-        public int sumAll(CardStrategy cs) {
+        public int sumAll() {
             List<Card> list = cardSet.stream().sorted(Comparator.comparing(Card::getNumericValue, Comparator.reverseOrder())).collect(Collectors.toList());
             int total = 0;
             for (Card card : list) {
-                if (cs.containsCardNumber(card)) {
-                    if (total + 10 <= 21) total += 10;
-                    else total += ACE.getNumericValue();
-                }
-                else total += card.getNumericValue();
+                total = card.getCardNumber().apply(total);
             }
-            return total;
+            if (total > BLACKJACK_NUMBER) throw new IllegalStateException("블랙잭을 넘었습니다.");
+            else return total;
         }
-    }
-
-    private interface CardStrategy {
-        boolean containsCardNumber(Card card);
     }
 
     enum CardNumber {
-        ACE(1),
-        TWO(2),
-        THREE(3),
-        FOUR(4),
-        FIVE(5),
-        SIX(6),
-        SEVEN(7),
-        EIGHT(8),
-        NINE(9),
-        TEN(10),
-        JACK(10),
-        QUEEN(10),
-        KING(10);
+        ACE(1,t -> t + 10 > 21 ? t + 1 : t + 10),
+        TWO(2, t -> t + 2),
+        THREE(3, t -> t + 3),
+        FOUR(4, t -> t + 4),
+        FIVE(5,t -> t + 5),
+        SIX(6, t -> t + 6),
+        SEVEN(7, t -> t + 7),
+        EIGHT(8, t -> t + 8),
+        NINE(9, t -> t + 9),
+        TEN(10, t -> t + 10),
+        JACK(10, t -> t + 10),
+        QUEEN(10, t -> t + 10),
+        KING(10, t -> t + 10);
 
-        private int value;
+        private Integer value;
+        private Function<Integer, Integer> function;
 
-        CardNumber(int value) {
+        CardNumber(Integer value, Function<Integer, Integer> function) {
             this.value = value;
+            this.function = function;
         }
+
+        public int apply(int currentSum) { return function.apply(currentSum);}
 
         public int getNumericValue() { return value; }
     }
