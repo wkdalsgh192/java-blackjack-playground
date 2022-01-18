@@ -2,7 +2,7 @@ package blackjack.model;
 
 import java.util.function.Function;
 
-enum CardNumber {
+public enum CardNumber {
     ACE(1, t -> t + 10 > 21 ? t + 1 : t + 10),
     TWO(2, t -> t + 2),
     THREE(3, t -> t + 3),

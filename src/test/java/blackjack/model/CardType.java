@@ -1,6 +1,6 @@
 package blackjack.model;
 
-enum CardType {
+public enum CardType {
     HEART,
     SPADE,
     CLOVER,

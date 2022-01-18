@@ -1,0 +1,51 @@
+package blackjack.view;
+
+import blackjack.model.Card;
+import blackjack.model.Cards;
+
+import java.util.List;
+import java.util.Objects;
+
+class Player {
+
+    private String name;
+    private Integer money;
+    private Cards cards;
+
+    public Player(String name) {
+        this.name = name;
+    }
+
+    public Player(String name, Integer money) {
+        this.name = name;
+        this.money = money;
+    }
+
+    public Player(String name, Integer money, List<Card> cardList) {
+        this.name = name;
+        this.money = money;
+        this.cards = Cards.of(cardList.get(0), cardList.get(1));
+    }
+
+    public void bet(Integer money) {
+        this.money = money;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player other = (Player) o;
+        return Objects.equals(name, other.name) && Objects.equals(money, other.money) && Objects.equals(cards, other.cards);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, money);
+    }
+
+    public void receive(List<Card> cardList) {
+        this.cards = new Cards();
+        cardList.stream().forEach(cards::add);
+    }
+}

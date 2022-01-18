@@ -1,12 +1,9 @@
 package blackjack.model;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-class Cards {
+public class Cards {
 
     private final int BLACKJACK_NUMBER = 21;
     private final Set<Card> cardSet = new HashSet<>();
@@ -30,5 +27,18 @@ class Cards {
         }
         if (total > BLACKJACK_NUMBER) throw new IllegalStateException("블랙잭을 넘었습니다.");
         else return total;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cards cards = (Cards) o;
+        return Objects.equals(cardSet, cards.cardSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardSet);
     }
 }

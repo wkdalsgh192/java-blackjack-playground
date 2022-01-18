@@ -1,6 +1,6 @@
 package blackjack.model;
 
-class Card {
+public class Card {
 
     private CardNumber number;
     private CardType type;
