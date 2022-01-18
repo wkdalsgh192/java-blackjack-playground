@@ -27,8 +27,15 @@ class Player {
         this.cards = Cards.of(cardList.get(0), cardList.get(1));
     }
 
+    public String getName() { return this.name; }
+
     public void bet(Integer money) {
         this.money = money;
+    }
+
+    public void receive(List<Card> cardList) {
+        this.cards = new Cards();
+        cardList.stream().forEach(cards::add);
     }
 
     @Override
@@ -44,8 +51,8 @@ class Player {
         return Objects.hash(name, money);
     }
 
-    public void receive(List<Card> cardList) {
-        this.cards = new Cards();
-        cardList.stream().forEach(cards::add);
+    @Override
+    public String toString() {
+        return name+": "+cards;
     }
 }

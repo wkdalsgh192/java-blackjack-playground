@@ -41,4 +41,11 @@ public class Cards {
     public int hashCode() {
         return Objects.hash(cardSet);
     }
+
+    @Override
+    public String toString() {
+        return "Cards{" +
+                "cardSet=" + cardSet +
+                '}';
+    }
 }
