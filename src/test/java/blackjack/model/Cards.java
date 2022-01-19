@@ -15,6 +15,17 @@ public class Cards {
         return cards;
     }
 
+    public static List<Card> shuffle(CardStrategy strategy) {
+        List<Card> deck = new ArrayList<>();
+        for (CardNumber number : CardNumber.values()) {
+            for (CardType type : CardType.values()) {
+                deck.add(new Card(number, type));
+            }
+        }
+        if (strategy.isRandom()) Collections.shuffle(deck);
+        return deck;
+    }
+
     public void add(Card card) {
         this.cardSet.add(card);
     }
