@@ -10,7 +10,7 @@ public class Player {
 
     private String name;
     private Integer money;
-    private Cards cards;
+    private Cards cards = new Cards();
 
     private final int INVALID_DEALER_NUMBER = 16;
     private final int INVALID_PLAYER_NUMBER = 21;
@@ -38,9 +38,12 @@ public class Player {
         this.money = money;
     }
 
+    public void receive(Card card) {
+        this.cards.add(card);
+    }
+
     public void receive(List<Card> cardList) {
-        this.cards = new Cards();
-        cardList.stream().forEach(cards::add);
+        cardList.forEach(cards::add);
     }
 
     @Override

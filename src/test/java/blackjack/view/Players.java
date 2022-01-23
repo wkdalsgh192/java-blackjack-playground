@@ -41,4 +41,6 @@ public class Players {
         }
         return sb.toString();
     }
+
+    public Player getDealer() { return dealer; }
 }
