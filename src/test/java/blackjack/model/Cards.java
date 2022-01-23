@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class Cards {
 
     private final int BLACKJACK_NUMBER = 21;
+    private final int VALID_DEALER_NUMBER = 16;
     private final List<Card> cardSet = new LinkedList<>();
 
     public static Cards of(Card c1, Card c2) {
@@ -43,6 +44,8 @@ public class Cards {
         if (total > BLACKJACK_NUMBER) throw new IllegalStateException("블랙잭을 넘었습니다.");
         else return total;
     }
+
+    public boolean isValid() { return sumAll() <= VALID_DEALER_NUMBER; }
 
     @Override
     public boolean equals(Object o) {

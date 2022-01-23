@@ -1,12 +1,14 @@
 package blackjack.model;
 
+import blackjack.view.Player;
+import blackjack.view.Players;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static blackjack.model.CardNumber.A;
-import static blackjack.model.CardNumber.K;
+import static blackjack.model.CardNumber.*;
 import static blackjack.model.CardType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -54,4 +56,13 @@ public class BlackJackTest {
         cardList = Cards.shuffle(() -> 0);
         assertThat(Cards.of(cardList.get(0), cardList.get(1))).isEqualTo(expected); //NOTE: 어떻게 완전한 랜덥값을 보장할까?
     }
+
+    @Test
+    @DisplayName("해당 플레이어가 딜러인 경우, 카드의 합계가 16이 넘는 지 확인한다.")
+    void GivenDealerCards_WhenSumOverSixteen_Expect_true() {
+        Player player = new Player("딜러");
+        player.receive(Arrays.asList(new Card(A, 하트), new Card(TWO, 스페이드)));
+        assertThat(player.getCards().isValid()).isEqualTo(true);
+    }
+
 }

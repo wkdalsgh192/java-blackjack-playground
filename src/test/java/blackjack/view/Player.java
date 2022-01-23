@@ -6,7 +6,7 @@ import blackjack.model.Cards;
 import java.util.List;
 import java.util.Objects;
 
-class Player {
+public class Player {
 
     private String name;
     private Integer money;
@@ -55,4 +55,6 @@ class Player {
     public String toString() {
         return name+": "+cards;
     }
+
+    public Cards getCards() { return cards; }
 }
