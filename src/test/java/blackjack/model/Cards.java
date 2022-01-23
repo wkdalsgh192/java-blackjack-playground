@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class Cards {
 
     private final int BLACKJACK_NUMBER = 21;
-    private final Set<Card> cardSet = new HashSet<>();
+    private final List<Card> cardSet = new LinkedList<>();
 
     public static Cards of(Card c1, Card c2) {
         Cards cards = new Cards();
@@ -22,7 +22,11 @@ public class Cards {
                 deck.add(new Card(number, type));
             }
         }
-        if (strategy.isRandom()) Collections.shuffle(deck);
+        if (strategy.isRandom() > 0) {
+            for (int i = 0; i < strategy.isRandom(); i++) {
+                Collections.shuffle(deck);
+            }
+        }
         return deck;
     }
 
@@ -55,8 +59,8 @@ public class Cards {
 
     @Override
     public String toString() {
-        return "Cards{" +
-                "cardSet=" + cardSet +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        cardSet.forEach(c -> sb.append(c.toString()));
+        return sb.substring(0, sb.length() - 2);
     }
 }

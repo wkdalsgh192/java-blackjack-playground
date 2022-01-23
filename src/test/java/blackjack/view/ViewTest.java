@@ -3,15 +3,16 @@ package blackjack.view;
 import blackjack.model.Card;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static blackjack.model.CardNumber.KING;
+import static blackjack.model.CardNumber.K;
 import static blackjack.model.CardNumber.THREE;
-import static blackjack.model.CardType.CLOVER;
-import static blackjack.model.CardType.HEART;
+import static blackjack.model.CardType.클로버;
+import static blackjack.model.CardType.하트;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ViewTest {
@@ -38,10 +39,19 @@ public class ViewTest {
         @Test
         @DisplayName("참가자의 수만큼 카드를 두 장씩 배분한다.")
         void GivenPlayers_WhenDealerDeals_DistributePairOfCardsRandomly() {
-            List<Card> cardList = Arrays.asList(new Card(KING, HEART), new Card(THREE, CLOVER));
+            List<Card> cardList = Arrays.asList(new Card(K, 하트), new Card(THREE, 클로버));
             Player player = new Player("pobi", 1000);
             player.receive(cardList);
             assertThat(player).isEqualTo(new Player("pobi", 1000, cardList));
+        }
+
+        @RepeatedTest(5)
+        @DisplayName("참가자에게 2장씩 나누고, 해당 결과를 출력한다.")
+        void GivenDealerDeals_WhenDistributeTwoCards_PrintOutTheResult() {
+            List<Card> cardList = Arrays.asList(new Card(K, 하트), new Card(THREE, 클로버));
+            Player player = new Player("pobi", 1000);
+            player.receive(cardList);
+            assertThat(player.toString()).isEqualTo("pobi: K하트, 3클로버");
         }
 
     }

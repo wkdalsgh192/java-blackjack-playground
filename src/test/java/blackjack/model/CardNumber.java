@@ -3,7 +3,7 @@ package blackjack.model;
 import java.util.function.Function;
 
 public enum CardNumber {
-    ACE(1, t -> t + 10 > 21 ? t + 1 : t + 10),
+    A(1, t -> t + 10 > 21 ? t + 1 : t + 10),
     TWO(2, t -> t + 2),
     THREE(3, t -> t + 3),
     FOUR(4, t -> t + 4),
@@ -13,9 +13,9 @@ public enum CardNumber {
     EIGHT(8, t -> t + 8),
     NINE(9, t -> t + 9),
     TEN(10, t -> t + 10),
-    JACK(10, t -> t + 10),
-    QUEEN(10, t -> t + 10),
-    KING(10, t -> t + 10);
+    J(10, t -> t + 10),
+    Q(10, t -> t + 10),
+    K(10, t -> t + 10);
 
     private Integer value;
     private Function<Integer, Integer> function;
@@ -31,5 +31,11 @@ public enum CardNumber {
 
     public int getNumericValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        if (this == A || this == J || this == Q || this == K) return this.name();
+        return String.valueOf(this.getNumericValue());
     }
 }

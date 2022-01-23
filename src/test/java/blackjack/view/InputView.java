@@ -1,5 +1,8 @@
 package blackjack.view;
 
+import blackjack.model.Card;
+import blackjack.model.Cards;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,15 +18,25 @@ public class InputView {
         Players players = enroll(new Scanner(System.in).next());
         for (Player player : players.getBetPlayers()) {
             System.out.println(player.getName()+BET_MESSAGE);
-            player.bet(Integer.valueOf(new Scanner(System.in).next()));
+            String input = new Scanner(System.in).nextLine();
+            player.bet(Integer.valueOf(input));
         }
         System.out.println(players + DEAL_MESSAGE);
-        players.getAllPlayers().stream().forEach(System.out::println);
+        // 2장씩 카드를 나누기
+        int i = 0;
+        List<Card> cardList = Cards.shuffle(() -> 2);
+        for (Player player : players.getAllPlayers()) {
+            player.receive(cardList.subList(i, i+2));
+            System.out.println(player);
+            i+=2;
+        }
+
     }
 
     static Players enroll(String input) {
         Players players = new Players();
         // TODO 20220118 장민호 특수문자 제거 코드 포함
+        input = input.replace(" ", "");
         for (String name : input.split(",")) {
             players.add(new Player(name));
         }
@@ -47,10 +60,10 @@ public class InputView {
         public List<Player> getBetPlayers() { return players;}
 
         public List<Player> getAllPlayers() {
-            List<Player> players = new ArrayList<>();
-            players.add(dealer);
-            players.addAll(players);
-            return players;
+            List<Player> playerList = new ArrayList<>();
+            playerList.add(dealer);
+            playerList.addAll(players);
+            return playerList;
         }
 
         public int size() {
@@ -60,8 +73,9 @@ public class InputView {
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
-            sb.append(dealer.getName()+"와 ");
-            for (Player player : players) { sb.append(player.getName()+", "); }
+            sb.append(dealer.getName()).append("와 ");
+            for (Player player : players) {
+                sb.append(player.getName()).append(", "); }
             return sb.toString();
         }
     }

@@ -1,8 +1,8 @@
 package blackjack.model;
 
 public enum CardType {
-    HEART,
-    SPADE,
-    CLOVER,
-    DIAMOND
+    하트,
+    스페이드,
+    클로버,
+    다이아몬드
 }
