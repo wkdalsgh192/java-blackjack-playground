@@ -12,6 +12,9 @@ public class Player {
     private Integer money;
     private Cards cards;
 
+    private final int INVALID_DEALER_NUMBER = 16;
+    private final int INVALID_PLAYER_NUMBER = 21;
+
     public Player(String name) {
         this.name = name;
     }
@@ -27,7 +30,9 @@ public class Player {
         this.cards = Cards.of(cardList.get(0), cardList.get(1));
     }
 
-    public String getName() { return this.name; }
+    public String getName() {
+        return this.name;
+    }
 
     public void bet(Integer money) {
         this.money = money;
@@ -53,8 +58,15 @@ public class Player {
 
     @Override
     public String toString() {
-        return name+": "+cards;
+        return name + ": " + cards;
     }
 
-    public Cards getCards() { return cards; }
+    public boolean AbleToGetMoreCard() {
+        if (isDealer()) return cards.isValid(INVALID_DEALER_NUMBER);
+        return cards.isValid(INVALID_PLAYER_NUMBER);
+    }
+
+    private boolean isDealer() {
+        return name.equals("딜러");
+    }
 }

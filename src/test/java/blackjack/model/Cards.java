@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 public class Cards {
 
     private final int BLACKJACK_NUMBER = 21;
-    private final int VALID_DEALER_NUMBER = 16;
     private final List<Card> cardSet = new LinkedList<>();
 
     public static Cards of(Card c1, Card c2) {
@@ -45,7 +44,7 @@ public class Cards {
         else return total;
     }
 
-    public boolean isValid() { return sumAll() <= VALID_DEALER_NUMBER; }
+    public boolean isValid(int numberConstraint) { return sumAll() < numberConstraint; }
 
     @Override
     public boolean equals(Object o) {

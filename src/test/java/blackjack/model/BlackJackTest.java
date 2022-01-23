@@ -62,7 +62,15 @@ public class BlackJackTest {
     void GivenDealerCards_WhenSumOverSixteen_Expect_true() {
         Player player = new Player("딜러");
         player.receive(Arrays.asList(new Card(A, 하트), new Card(TWO, 스페이드)));
-        assertThat(player.getCards().isValid()).isEqualTo(true);
+        assertThat(player.AbleToGetMoreCard()).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("해당 플레이어가 딜러가 아닌 경우, 카드의 합계가 21이 넘는 지 확인한다.")
+    void GivenPlayerCards_WhenSumNotOverBlackJack_Expect_True() {
+        Player player = new Player("pobi");
+        player.receive(Arrays.asList(new Card(A, 하트), new Card(TEN, 스페이드)));
+        assertThat(player.AbleToGetMoreCard()).isEqualTo(true);
     }
 
 }
