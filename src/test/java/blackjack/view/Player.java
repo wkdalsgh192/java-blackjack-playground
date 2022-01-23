@@ -72,4 +72,6 @@ public class Player {
     private boolean isDealer() {
         return name.equals("딜러");
     }
+
+    public int getResult() { return cards.sumAll(); }
 }

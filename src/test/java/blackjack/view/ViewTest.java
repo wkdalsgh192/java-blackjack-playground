@@ -9,10 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static blackjack.model.CardNumber.K;
-import static blackjack.model.CardNumber.THREE;
-import static blackjack.model.CardType.클로버;
-import static blackjack.model.CardType.하트;
+import static blackjack.model.CardNumber.*;
+import static blackjack.model.CardType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ViewTest {
@@ -59,6 +57,26 @@ public class ViewTest {
     @Nested
     @DisplayName("Output View Test")
     class OutputViewTest {
+
+        @Test
+        @DisplayName("카드 분배가 모두 끝나면 각자의 카드와 합을 출력한다.")
+        void whenDealEnds_Expect_PrintOutSumOfCardNumbers() {
+            Players players = new Players();
+            Player dealer = players.getDealer();
+            dealer.receive(Arrays.asList(new Card(K, 하트), new Card(THREE, 클로버)));
+            Player player = new Player("pobi");
+            player.receive(Arrays.asList(new Card(TWO, 스페이드), new Card(THREE, 클로버)));
+            players.add(player);
+
+            StringBuilder sb = new StringBuilder();
+            String message = " - 결과: ";
+            for(Player p : players.getAllPlayers()) {
+                sb.append(p).append(message).append(p.getResult()+"\n");
+            }
+
+            String expected = "딜러: K하트, 3클로버 - 결과: 13\npobi: 2스페이드, 3클로버 - 결과: 5\n";
+            assertThat(sb.toString()).isEqualTo(expected);
+        }
 
     }
 
