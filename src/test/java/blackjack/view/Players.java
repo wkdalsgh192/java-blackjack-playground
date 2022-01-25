@@ -1,7 +1,9 @@
 package blackjack.view;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class Players {
 
@@ -43,4 +45,8 @@ public class Players {
     }
 
     public Player getDealer() { return dealer; }
+
+    public Optional<Player> findLoser() {
+        return players.stream().sorted(Comparator.comparingInt(Player::getResult)).findFirst();
+    }
 }
