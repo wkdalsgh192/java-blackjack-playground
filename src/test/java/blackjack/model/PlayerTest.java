@@ -56,22 +56,30 @@ public class PlayerTest {
             dealer = players.getDealer();
             pobi = new Player("pobi");
             jason = new Player("jason");
-        }
 
-        @Test
-        @DisplayName("어느 한 쪽도 BlackJack을 넘어가지 않는 경우, 합계가 가장 낮은 사람을 찾는다.")
-        void GivenPlayers_WhenNoOneOverBlackJack_Expect_FindSmallestSumPlayer() {
             dealer.receive(Arrays.asList(new Card(A, 하트), new Card(K, 스페이드)));
             pobi.receive(Arrays.asList(new Card(FIVE, 다이아몬드), new Card(EIGHT, 클로버)));
             jason.receive(Arrays.asList(new Card(J, 스페이드), new Card(K, 하트)));
             players.add(pobi);
             players.add(jason);
+        }
 
+        @Test
+        @DisplayName("어느 한 쪽도 BlackJack을 넘어가지 않는 경우, 합계가 가장 낮은 사람을 찾는다.")
+        void GivenPlayers_WhenNoOneOverBlackJack_Expect_FindLoser() {
             Optional<Player> opt = players.findLoser();
             opt.ifPresent((p) -> assertThat(p).isEqualTo(pobi));
         }
 
+        @Test
+        @DisplayName("어느 한 쪽이 BlackJack을 넘어가는 경우, 넘어간 사람을 모두 찾는다.")
+        void GivenPlayers_WhenSomeOneOverBlackJack_Expect_FindLoser() {
+            pobi.receive(new Card(TEN, 하트));
 
+            Optional<Player> opt = players.findLoser();
+            opt.ifPresent((p) -> assertThat(p).isEqualTo(pobi));
+
+        }
     }
 
 
