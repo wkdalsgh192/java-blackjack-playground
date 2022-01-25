@@ -81,19 +81,30 @@ public class ViewTest {
                 for(Player p : players.getAllPlayers()) { sb.append(p).append(message).append(p.getResult()+"\n"); }
                 return sb.toString();
             }
+
+            public String printBetResult(Players players) {
+                StringBuilder sb = new StringBuilder();
+                String message = "";
+                return "";
+            }
         }
 
-/*        @Test
+        @Test
         @DisplayName("최종 수익을 계산해 분배한 결과를 출력한다.")
         void whenDealEnds_Expect_PrintOutBetResult() {
+            Players players = new Players();
+            Player dealer = players.getDealer();
+            dealer.receive(Arrays.asList(new Card(K, 하트), new Card(THREE, 클로버)));
+            Player player = new Player("pobi");
+            player.receive(Arrays.asList(new Card(TWO, 스페이드), new Card(THREE, 클로버)));
+            players.add(player);
 
+            OutputView outputView = new OutputView();
+            String betResult = outputView.printBetResult(players);
 
-            StringBuilder sb = new StringBuilder();
-
-
-            String expected = "## 최종 수익\n딜러: \n pobi: \njason: ";
-            assertThat(sb.toString()).isEqualTo(expected);
-        }*/
+            String expected = "## 최종 수익\n딜러: \npobi: \njason: ";
+            assertThat(betResult).isEqualTo(expected);
+        }
 
     }
 
