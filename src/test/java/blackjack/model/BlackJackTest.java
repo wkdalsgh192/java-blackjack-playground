@@ -6,7 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import static blackjack.model.CardNumber.*;
 import static blackjack.model.CardType.*;
@@ -71,6 +73,23 @@ public class BlackJackTest {
         Player player = new Player("pobi");
         player.receive(Arrays.asList(new Card(A, 하트), new Card(TEN, 스페이드)));
         assertThat(player.AbleToGetMoreCard()).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("어느 한 쪽도 BlackJack을 넘어가지 않는 경우, 합계가 가장 낮은 사람을 찾는다.")
+    void GivenPlayers_WhenNoOneOverBlackJack_Expect_FindSmallestSumPlayer() {
+        Players players = new Players();
+        Player dealer = players.getDealer();
+        dealer.receive(Arrays.asList(new Card(A, 하트), new Card(K, 스페이드)));
+        Player pobi = new Player("pobi");
+        pobi.receive(Arrays.asList(new Card(FIVE, 다이아몬드), new Card(EIGHT, 클로버)));
+        players.add(pobi);
+        Player jason = new Player("jason");
+        jason.receive(Arrays.asList(new Card(J, 스페이드), new Card(K, 하트)));
+        players.add(jason);
+
+        Optional<Player> smallestSumPlayer = players.getAllPlayers().stream().sorted(Comparator.comparingInt(Player::getResult)).findFirst();
+        smallestSumPlayer.ifPresent((p) -> assertThat(p).isEqualTo(pobi));
     }
 
 }
