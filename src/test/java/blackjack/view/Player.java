@@ -43,6 +43,7 @@ public class Player {
     }
 
     public void receive(List<Card> cardList) {
+        cards = new Cards();
         cardList.forEach(cards::add);
     }
 
@@ -56,7 +57,7 @@ public class Player {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, money);
+        return Objects.hash(name);
     }
 
     @Override
@@ -73,5 +74,7 @@ public class Player {
         return name.equals("딜러");
     }
 
-    public int getResult() { return cards.sumAll(); }
+    public int getResult() {
+        return cards.sumAll();
+    }
 }

@@ -7,9 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Optional;
+import java.util.*;
 
 import static blackjack.model.CardNumber.*;
 import static blackjack.model.CardType.*;
@@ -67,19 +65,26 @@ public class PlayerTest {
         @Test
         @DisplayName("어느 한 쪽도 BlackJack을 넘어가지 않는 경우, 합계가 가장 낮은 사람을 찾는다.")
         void GivenPlayers_WhenNoOneOverBlackJack_Expect_FindLoser() {
-            Optional<Player> opt = players.findLoser();
-            opt.ifPresent((p) -> assertThat(p).isEqualTo(pobi));
+            List<Player> loserList = players.findLoser();
+            assertThat(loserList).isEqualTo(Collections.singletonList(pobi));
         }
 
         @Test
+        @DisplayName("어느 한 쪽도 BlackJack을 넘어가지 않고, 가장 낮은 합계를 가진 사람이 여럿일 경우 가장 낮은 사람들을 찾는다.")
+        void givenPlayers_WhenNoOneOverBlackJack_And_MultipleLosers_FindLosers() {
+            jason.receive(Arrays.asList(new Card(EIGHT, 스페이드), new Card(FIVE, 하트)));
+            List<Player> loserList = players.findLoser();
+            assertThat(loserList).isEqualTo(Arrays.asList(pobi, jason));
+        }
+
+/*        @Test
         @DisplayName("어느 한 쪽이 BlackJack을 넘어가는 경우, 넘어간 사람을 모두 찾는다.")
         void GivenPlayers_WhenSomeOneOverBlackJack_Expect_FindLoser() {
             pobi.receive(new Card(TEN, 하트));
 
             Optional<Player> opt = players.findLoser();
             opt.ifPresent((p) -> assertThat(p).isEqualTo(pobi));
-
-        }
+        }*/
     }
 
 
