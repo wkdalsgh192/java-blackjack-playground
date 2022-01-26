@@ -17,6 +17,7 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
+        this.money = 0;
     }
 
     public Player(String name, Integer money) {
@@ -33,6 +34,10 @@ public class Player {
     public String getName() {
         return this.name;
     }
+
+    public Integer getMoney() { return this.money; }
+
+    public void accept(Integer money) { this.money += money; }
 
     public void bet(Integer money) {
         this.money = money;

@@ -48,7 +48,7 @@ public class InputView {
     }
 
     static Players enroll(String input) {
-        Players players = new Players();
+        Players players = Players.initialize();
         // TODO 20220118 장민호 특수문자 제거 코드 포함
         input = input.replace(" ", "");
         for (String name : input.split(",")) {

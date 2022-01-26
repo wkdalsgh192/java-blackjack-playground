@@ -61,7 +61,7 @@ public class ViewTest {
         @Test
         @DisplayName("카드 분배가 모두 끝나면 각자의 카드와 합을 출력한다.")
         void whenDealEnds_Expect_PrintOutSumOfCardNumbers() {
-            Players players = new Players();
+            Players players = Players.initialize();
             Player dealer = players.getDealer();
             dealer.receive(Arrays.asList(new Card(K, 하트), new Card(THREE, 클로버)));
             Player player = new Player("pobi");
@@ -92,7 +92,7 @@ public class ViewTest {
         @Test
         @DisplayName("최종 수익을 계산해 분배한 결과를 출력한다.")
         void whenDealEnds_Expect_PrintOutBetResult() {
-            Players players = new Players();
+            Players players = Players.initialize();
             Player dealer = players.getDealer();
             dealer.receive(Arrays.asList(new Card(K, 하트), new Card(THREE, 클로버)));
             Player player = new Player("pobi");
