@@ -77,15 +77,12 @@ public class PlayerTest {
             assertThat(loserList).isEqualTo(Arrays.asList(pobi, jason));
         }
 
-/*        @Test
+        @Test
         @DisplayName("어느 한 쪽이 BlackJack을 넘어가는 경우, 넘어간 사람을 모두 찾는다.")
         void GivenPlayers_WhenSomeOneOverBlackJack_Expect_FindLoser() {
             pobi.receive(new Card(TEN, 하트));
-
-            Optional<Player> opt = players.findLoser();
-            opt.ifPresent((p) -> assertThat(p).isEqualTo(pobi));
-        }*/
+            List<Player> loserList = players.findLoser();
+            assertThat(loserList).isEqualTo(Collections.singletonList(pobi));
+        }
     }
-
-
 }

@@ -75,6 +75,10 @@ public class Player {
     }
 
     public int getResult() {
-        return cards.sumAll();
+        try {
+            return cards.sumAll();
+        } catch (IllegalStateException e) {
+            return -1;
+        }
     }
 }
