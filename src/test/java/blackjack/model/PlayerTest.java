@@ -84,5 +84,12 @@ public class PlayerTest {
             List<Player> loserList = players.findLoser();
             assertThat(loserList).isEqualTo(Collections.singletonList(pobi));
         }
+
+        @Test
+        @DisplayName("진 사람의 베팅 머니를 모두 이긴 사람에게 배분한다.")
+        void givenPlayers_WhenFindLoser_Expect_GetProperCoins() {
+            List<Player> loserList = players.findLoser();
+
+        }
     }
 }
